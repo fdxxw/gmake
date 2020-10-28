@@ -1,0 +1,11 @@
+vars:
+  name: 1
+all: |
+  @set name 2
+  @echo {{.name}}
+  # @copy test D:/tmp/test
+  @mkdir tests
+  @touch tests/test
+  @rm tests/test
+  @rm tests
+  @cd tests
