@@ -11,6 +11,6 @@ all: |
   @cd tests
   @cd .
   @env GOOS linux
-  go build -o ./bin/gmake cmd/gmake/main.go
+  go build -o ./bin/gmake gmake.go
   @env GOOS windows
-  go build -o ./bin/gmake.exe cmd/gmake/main.go
+  go build -o ./bin/gmake.exe gmake.go
