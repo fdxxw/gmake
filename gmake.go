@@ -24,6 +24,7 @@ var (
 )
 
 func main() {
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	var rootCmd = &cobra.Command{
 		Use:   "gmake",
 		Short: "parse custom makefile and execute",
@@ -48,7 +49,12 @@ func parseConfig(cfgFile string) map[string]interface{} {
 }
 
 func run(ym map[string]interface{}) {
-	vars := ym["vars"].(map[interface{}]interface{})
+	var vars map[interface{}]interface{}
+	if v, ok := ym["vars"]; ok {
+		vars = v.(map[interface{}]interface{})
+	} else {
+		vars = make(map[interface{}]interface{})
+	}
 	t := time.Now().Format("2006-01-02 15:04")
 	vars["time"] = t
 	cmdDir := ""
@@ -130,7 +136,7 @@ func copy(src, dst string) {
 	src = filepath.Clean(src)
 	dst = filepath.Clean(dst)
 	if isDir(src) {
-		if !isDir(dst) {
+		if isFile(dst) {
 			panic(fmt.Errorf("不能复制目录到文件 src=%v dst=%v", src, dst))
 		}
 		si, err := os.Stat(src)
@@ -155,10 +161,10 @@ func copy(src, dst string) {
 			}
 		}
 	} else {
-		if isDir(dst) {
-			copyFile(src, path.Join(dst, filepath.Base(src)))
-		} else {
+		if isFile(dst) {
 			copyFile(src, dst)
+		} else {
+			copyFile(src, path.Join(dst, filepath.Base(src)))
 		}
 	}
 }
@@ -225,6 +231,13 @@ func isDir(path string) bool {
 		return false
 	}
 	return s == nil || s.IsDir()
+}
+func isFile(path string) bool {
+	s, err := os.Stat(path)
+	if err != nil && !os.IsNotExist(err) {
+		return false
+	}
+	return s == nil || !s.IsDir()
 }
 func ExecCmd(c *exec.Cmd) {
 	log.Println(c.String())

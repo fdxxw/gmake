@@ -1,0 +1,20 @@
+vars:
+  msg: Hello World
+all: |
+  @echo {{.msg}}
+  # 修改msg变量
+  @var msg Hello
+  @echo {{.msg}}
+  # 创建文件
+  @touch from.txt
+  @mv from.txt to.txt
+  @copy to.txt to.txt
+  @rm from.txt
+  @rm to.txt
+  @mkdir from
+  @mv from to
+  @copy to from
+  @rm from
+  @rm to
+  @env GOOS linux
+  go build
