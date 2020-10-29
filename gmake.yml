@@ -9,4 +9,8 @@ all: |
   @rm tests/test
   @rm tests
   @cd tests
+  @cd .
   @env GOOS linux
+  go build -o ./bin/gmake cmd/gmake/main.go
+  @env GOOS windows
+  go build -o ./bin/gmake.exe cmd/gmake/main.go
