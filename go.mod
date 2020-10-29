@@ -1,4 +1,4 @@
-module github/fdxxw/gmake
+module github.com/fdxxw/gmake
 
 go 1.15
 
