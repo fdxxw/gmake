@@ -65,8 +65,11 @@ func run(ym map[string]interface{}) {
 					bin := cmdStrs[0]
 					args := cmdStrs[1:]
 					switch bin {
-					case "@set":
+					case "@var":
 						vars[args[0]] = strings.Join(args[1:], " ")
+						break
+					case "@env":
+						os.Setenv(args[0], strings.Join(args[1:], " "))
 						break
 					case "#":
 						break

@@ -1,7 +1,7 @@
 vars:
   name: 1
 all: |
-  @set name 2
+  @var name 2
   @echo {{.name}}
   # @copy test D:/tmp/test
   @mkdir tests
@@ -9,3 +9,4 @@ all: |
   @rm tests/test
   @rm tests
   @cd tests
+  @env GOOS linux
