@@ -15,6 +15,7 @@ import (
 	"text/template"
 	"time"
 
+	shellquote "github.com/kballard/go-shellquote"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -69,7 +70,7 @@ func run(ym map[string]interface{}) {
 						continue
 					}
 					// line = ResolveVars(vars, line)
-					cmdStrs, err := parseCommandLine(line)
+					cmdStrs, err := shellquote.Split(line)
 					if err != nil {
 						log.Fatal(err)
 					}
