@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"path"
@@ -105,6 +106,10 @@ func run(ym map[string]interface{}) {
 						break
 					case "@touch":
 						touch(args[0])
+						break
+					case "@download":
+						err := downloadFile(args[1], args[0])
+						checkError(err)
 						break
 					case "@cd":
 						abs, err := filepath.Abs(args[0])
@@ -206,11 +211,31 @@ func touch(path string) {
 	defer f.Close()
 	checkError(err)
 }
+func downloadFile(filepath string, url string) error {
+
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	return err
+}
 func copy(src, dst string) {
 	src = filepath.Clean(src)
 	dst = filepath.Clean(dst)
 	if isDir(src) {
-		if isFile(dst) {
+		if !isDir(dst) {
 			panic(fmt.Errorf("不能复制目录到文件 src=%v dst=%v", src, dst))
 		}
 		si, err := os.Stat(src)
