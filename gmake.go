@@ -60,6 +60,11 @@ func run(ym map[string]interface{}) {
 	}
 	t := time.Now().Format("2006-01-02 15:04")
 	vars["time"] = t
+	for _, e := range os.Environ() {
+		pair := strings.SplitN(e, "=", 2)
+		fmt.Println(pair[0])
+		vars[pair[0]] = pair[1]
+	}
 	cmdDir := ""
 	for k, v := range ym {
 		if k != "vars" {
