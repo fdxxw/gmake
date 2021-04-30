@@ -62,7 +62,7 @@ func run(ym map[string]interface{}) {
 	vars["time"] = t
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
-		fmt.Println(pair[0])
+		// fmt.Println(pair[0])
 		vars[pair[0]] = pair[1]
 	}
 	cmdDir := ""
